@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper SYSTEM "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bawei.gmall.publisher.dao.OrderMapper">
+    <select id="getOrderAmount" resultType="java.lang.Double">
+        select sum(total_amount) total_amount from gmall_order_info where create_date=#{date}
+    </select>
+
+    <select id="getOrderHourAmount" resultMap="hourMap">
+        select create_hour ct, sum(total_amount) total_amount
+        from gmall_order_info
+        where create_date=#{date}
+        group by create_hour
+    </select>
+
+    <resultMap id="hourMap" type="com.bawei.gmall.publisher.bean.OrderHourAmountBean" autoMapping="true">
+        <result column="CT" property="createHour"/>
+        <result column="TOTAL_AMOUNT" property="sumOrderAmount"/>
+    </resultMap>
+</mapper>
